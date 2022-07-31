@@ -288,17 +288,6 @@
                     <form class="my-3" action="ManagerStatisticUserController" method="post">
                         <div class ="button__container">
                             <div></div>
-                            <div class="dropdown">
-                                <button type="button" class="btn btn-default dropdown-toggle my-3" data-toggle="dropdown" >
-                                    Chọn số lượng
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <div class="dropdown-item">
-                                        <input type="number" min="1"  name="numberCustomer" value="<%=numberCustomer%>"> 
-                                        <span>người</span>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="dropdown">    
                                 <button type="button" class="btn btn-default dropdown-toggle my-3" data-toggle="dropdown">
                                     Chọn thời gian
@@ -312,6 +301,18 @@
                                     </div>                                
                                 </div>
                             </div>
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-default dropdown-toggle my-3" data-toggle="dropdown" >
+                                    Chọn số lượng
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div class="dropdown-item">
+                                        <input type="number" min="1"  name="numberCustomer" value="<%=numberCustomer%>"> 
+                                        <span>người</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="p-3">
                                 <button class="btn btn-default" type="submit">Áp dụng</button>
                             </div>
