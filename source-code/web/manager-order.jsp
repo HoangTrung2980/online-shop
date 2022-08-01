@@ -15,7 +15,40 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="css/manager.css" type="text/css">
+        <style>
+            /* The container <div> - needed to position the dropdown content */
+            .dropdown {
+              position: relative;
+              display: inline-block;
+            }
 
+            /* Dropdown Content (Hidden by Default) */
+            .dropdown-content {
+              display: none;
+              position: absolute;
+              background-color: #f1f1f1;
+              min-width: 160px;
+              box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+              z-index: 1;
+            }
+
+            /* Links inside the dropdown */
+            .dropdown-content a {
+              color: black;
+              padding: 12px 16px;
+              text-decoration: none;
+              display: block;
+            }
+
+            /* Change color of dropdown links on hover */
+            .dropdown-content a:hover {background-color: #ddd;}
+
+            /* Show the dropdown menu on hover */
+            .dropdown:hover .dropdown-content {display: block;}
+
+            /* Change the background color of the dropdown button when the dropdown content is shown */
+            .dropdown:hover .dropbtn {background-color: #3e8e41;}
+        </style>
     </head>
     <body>
 
@@ -205,27 +238,49 @@
                 </div>
                 <div class="col-md-2">
                     <%
-                        List<OrderDTO> listOrder = (List<OrderDTO>) request.getAttribute("LIST_ORDER");
-                        int count = 0;
-                        if (listOrder != null) {
-                            for (OrderDTO order : listOrder) {
-                                if (order.getStatusID() == 6) {
-                                    count++;
-                                }
-                            }
-                        }
-
+                        int countCXN = (int)request.getAttribute("NUMBER_OF_STATUS_1");
+                        int countCHT = (int)request.getAttribute("NUMBER_OF_STATUS_6");
                     %>
-                    <form style="margin: 0;" action="SearchOrderController" method="POST">
-                        <input type="hidden" name="search-statusID" value="6"/>
-                        <input type="hidden" name="search" value=""/>
-                        <input type="hidden" name="dateFrom" value=""/>
-                        <input type="hidden" name="dateTo" value=""/>
-                        <button <% if (count == 0) { %> disabled="" style="cursor: default;"<%}%> data-toggle="tooltip" title="Hiện tại có <%= count%> đơn hàng đang chờ hoàn tiền" class="btn btn-default" type="submit">
+                    <div class="dropdown">
+                        <button class="btn btn-default" style="cursor: default;"<% if (countCHT + countCXN == 0) {%> data-toggle="tooltip" title="Hiện tại không có thông báo mới" <%}%>> 
                             <i class="fa fa-lg fa-bell"></i>
-                            <% if (count > 0) {%><span style="font-size: .6em; position: relative; bottom: 5px;"><%= count%></span><%}%>
+                            <% if (countCHT + countCXN > 0) {%><span id="low-stock__tip"><%= countCHT + countCXN%></span><%}%>
                         </button>
-                    </form>
+                        <div class="dropdown-content">
+                            <% if (countCXN > 0) { %>
+                            <div>
+                                <form style="margin: 0;" action="SearchOrderController" method="POST">
+                                    <input type="hidden" name="search-statusID" value="1"/>
+                                    <input type="hidden" name="search" value=""/>
+                                    <input type="hidden" name="dateFrom" value=""/>
+                                    <input type="hidden" name="dateTo" value=""/>
+                                    <button class="btn btn-default" type="submit">
+                                        Hiện tại có <%= countCXN%> đơn hàng đang chờ xác nhận
+                                    </button>
+                                </form>
+                            </div>
+                            
+                                
+                            <%} 
+                                if (countCHT > 0) {
+                            %>
+                            <div>
+                                <form style="margin: 0;" action="SearchOrderController" method="POST">
+                                    <input type="hidden" name="search-statusID" value="6"/>
+                                    <input type="hidden" name="search" value=""/>
+                                    <input type="hidden" name="dateFrom" value=""/>
+                                    <input type="hidden" name="dateTo" value=""/>
+                                    <button class="btn btn-default" type="submit">
+                                        Hiện tại có <%= countCHT%> đơn hàng đang chờ hoàn tiền
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            <%}%>
+                        </div>
+                    </div>
+                    
+                    
                 </div>
 
             </div>
@@ -234,6 +289,7 @@
 
             <br>${requestScope.EMPTY_LIST_MESSAGE}
             <%
+                List<OrderDTO> listOrder = (List<OrderDTO>) request.getAttribute("LIST_ORDER");
                 if (listOrder != null) {
                     if (listOrder.size() > 0) {
 

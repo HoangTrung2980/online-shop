@@ -25,7 +25,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
-    </script>
+        <link rel="stylesheet" href="css/statistic-responsive.css" type="text/css">
+   
     <style>
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
@@ -147,7 +148,7 @@
             background: white;
             text-align: center;
             border-radius: 1rem;
-            height: 30vh;
+         
             padding: 1rem 2rem;
         }
         .user__item > h5{
@@ -181,6 +182,10 @@
         }
         .fa-clock-rotate-left::before {
             content: "\f1da";
+        }
+        .dropdown-menu{
+            right:0;
+            left:auto;
         }
     </style>
 

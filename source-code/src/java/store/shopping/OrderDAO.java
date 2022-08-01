@@ -121,7 +121,8 @@ public class OrderDAO {
     private static final String NUMBER_OF_SEARCH_ORDER_BY_DATE = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID WHERE (orderDate BETWEEN ? AND ?) AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
     private static final String SEARCH_ORDER_BY_STATUS = "WITH subTable AS (\n"
             + "			SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber, ROW_NUMBER() OVER(ORDER BY v1.orderID DESC) as row#  \n"
-            + "                 FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID AND statusID = ? AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'\n"
+            + "                 FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
+            + "                 WHERE statusID = ? AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'\n"
             + "			)\n"
             + "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber\n"
             + "FROM subTable\n"
@@ -129,7 +130,8 @@ public class OrderDAO {
     private static final String NUMBER_OF_SEARCH_ORDER_BY_STATUS = "SELECT Top 1 COUNT (*) OVER () AS ROW_COUNT FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID AND statusID = ? AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'";
     private static final String SEARCH_ORDER_BY_NAME = "WITH subTable AS (\n"
             + "			SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber, ROW_NUMBER() OVER(ORDER BY v1.orderID DESC) as row#  \n"
-            + "			FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID AND [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'\n"
+            + "			FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID "
+            + "                 WHERE [TenKhongDau] LIKE '%' + [dbo].[fuChuyenCoDauThanhKhongDau](?) + '%'\n"
             + "			)\n"
             + "SELECT orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber\n"
             + "FROM subTable\n"
@@ -139,6 +141,10 @@ public class OrderDAO {
     private static final String GET_RETURNED_ORDER = "SELECT v1.orderID, orderDate, total, userID, fullName, statusID, statusName, payType, trackingID, [orderFullName], [address], phone, email, note, transactionNumber \n"
             + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID \n"
             + "WHERE statusID = 8 AND userID LIKE ?";
+
+    private static final String COUNT_ORDER_STATUS = "SELECT COUNT(statusID) AS numberOfStatus\n"
+            + "FROM currentStatusRow v1 JOIN orderReview v2 ON v1.ID = v2.ID \n"
+            + "WHERE statusID = ?";
     //-------------------------------
     private int numberOfOrder;
 
@@ -459,7 +465,7 @@ public class OrderDAO {
 
                     check = ptm.executeUpdate() > 0;
                 }
-                
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1124,5 +1130,32 @@ public class OrderDAO {
             }
         }
         return list;
+    }
+    public int countStatus(int statusID) throws SQLException {
+        int result = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBUtils.getConnection();
+            ptm = conn.prepareStatement(COUNT_ORDER_STATUS);
+            ptm.setInt(1, statusID);
+            rs = ptm.executeQuery();
+            while (rs.next()) {
+                result = rs.getInt("numberOfStatus");
+            }
+        } catch (Exception e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return result;
     }
 }

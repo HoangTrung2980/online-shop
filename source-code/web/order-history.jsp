@@ -105,8 +105,12 @@
                                 </div>
                             </div>
                         </div>
-                        <%}%>
                         <a style="float: right" class="mr-2" href="MainController?action=CustomerViewOrderDetail&orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn">CHI TIẾT</button></a>
+
+                        <%}else{%>
+                        <a style="float: right" class="mr-2" href="MainController?action=CustomerViewOrderDetail&orderID=<%=order.getKey().getOrderID()%>"><button class="primary-btn">CHI TIẾT</button></a>
+                        <p class="mr-4 mt-3" style="float: right; color: #ca1515; font-weight: 500"><%=order.getKey().getStatusName()%></p>
+                        <%}%>
 
 
 

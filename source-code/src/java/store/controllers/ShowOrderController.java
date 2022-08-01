@@ -37,7 +37,10 @@ public class ShowOrderController extends HttpServlet {
             
             OrderDAO dao = new OrderDAO();
             List<OrderDTO> listOrder = dao.getAllOrder((page * orderPerPage) - orderPerPage + 1, orderPerPage * page);
-            
+            int status1 = dao.countStatus(1);
+            int status6 = dao.countStatus(6);
+            request.setAttribute("NUMBER_OF_STATUS_1", status1);
+            request.setAttribute("NUMBER_OF_STATUS_6", status6);
             HttpSession session = request.getSession();
             UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
             if (!listOrder.isEmpty()) {
