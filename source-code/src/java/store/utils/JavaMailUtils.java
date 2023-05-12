@@ -29,8 +29,8 @@ import store.shopping.OrderDTO;
 public class JavaMailUtils {
 //    ---------------------------Email account---------------------------------------
 
-    public static final String EMAIL_ACCOUNT = "tongductrung2017@gmail.com"; // NOTE : THIS IS MY ACCOUNT FOR TESTING, PLEASE DO NOT MESS WITH IT!!!
-    public static final String EMAIL_PASSWORD = "crwgapvouhwaovvu";
+    public static final String EMAIL_ACCOUNT = "YourTestingMail"; // NOTE : Go to Manage Google Account and search "App password" to generate your own app password to use for sending mail!!!
+    public static final String EMAIL_PASSWORD = "YourTestingMailPassword";
 //    ------------------------------------------------------------------------------------
     private static int otpOut = 0;
 
